@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { SnippetsService } from './snippets.service';
 import { CreateSnippetDto } from './dto/create-snippet.dto';
 import { UpdateSnippetDto } from './dto/update-snippet.dto';
-import type { FilterSnippetDto } from './dto/filter-snippet.dto';
+import { FilterSnippetDto } from './dto/filter-snippet.dto';
 
 @Controller('snippets')
 export class SnippetsController {
