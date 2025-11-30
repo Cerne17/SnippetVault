@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { SnippetsService } from './snippets.service';
 import { CreateSnippetDto } from './dto/create-snippet.dto';
 import { UpdateSnippetDto } from './dto/update-snippet.dto';
+import type { FilterSnippetDto } from './dto/filter-snippet.dto';
 
 @Controller('snippets')
 export class SnippetsController {
@@ -15,8 +16,8 @@ export class SnippetsController {
   }
 
   @Get()
-  findAll() {
-    return this.snippetsService.findAll();
+  findAll(@Query() filterDto: FilterSnippetDto) {
+    return this.snippetsService.findAll(filterDto);
   }
 
   @Get(':id')

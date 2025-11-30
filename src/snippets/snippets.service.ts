@@ -4,6 +4,7 @@ import { UpdateSnippetDto } from './dto/update-snippet.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Snippet } from './schemas/snippet.schema';
 import type { Model } from 'mongoose';
+import type { FilterSnippetDto } from './dto/filter-snippet.dto';
 
 @Injectable()
 export class SnippetsService {
@@ -19,8 +20,19 @@ export class SnippetsService {
     return newSnippet.save();
   }
 
-  findAll(): Promise<Snippet[]> {
-    return this.snippetModel.find({ deletedAt: null }).exec();
+  findAll(filterDto: FilterSnippetDto): Promise<Snippet[]> {
+    const { language, tag } = filterDto;
+    const query: any = { deletedAt: null };
+
+    if (language) {
+      query.language = { $regex: language, $options: 'i' };
+    }
+
+    if (tag) {
+      query.tags = tag;
+    }
+
+    return this.snippetModel.find(query).exec();
   }
 
   findOne(id: string): Promise<Snippet> {
