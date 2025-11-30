@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { SnippetsModule } from './snippets/snippets.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { AppService } from './app.service';
         uri: configService.get<string>('MONGO_URI'),
       }),
       inject: [ConfigService],
-    })
+    }),
+    SnippetsModule
   ],
   controllers: [AppController],
   providers: [AppService],
