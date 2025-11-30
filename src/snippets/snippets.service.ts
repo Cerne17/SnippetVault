@@ -20,11 +20,11 @@ export class SnippetsService {
   }
 
   findAll(): Promise<Snippet[]> {
-    return this.snippetModel.find().exec();
+    return this.snippetModel.find({ deletedAt: null }).exec();
   }
 
   findOne(id: string): Promise<Snippet> {
-    return this.snippetModel.findById(id).exec();
+    return this.snippetModel.findOne({ _id: id, deletedAt: null }).exec();
   }
 
   update(id: string, updateSnippetDto: UpdateSnippetDto): Promise<Snippet> {
@@ -34,6 +34,8 @@ export class SnippetsService {
   }
 
   remove(id: string): Promise<Snippet> {
-    return this.snippetModel.findByIdAndDelete(id).exec();
+    return this.snippetModel
+      .findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true })
+      .exec();
   }
 }
