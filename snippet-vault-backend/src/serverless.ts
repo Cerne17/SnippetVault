@@ -26,9 +26,18 @@ async function bootstrap() {
 let isInitialized = false;
 
 export default async (req: any, res: any) => {
+  console.log('Incoming request:', req.method, req.url);
   if (!isInitialized) {
-    await bootstrap();
-    isInitialized = true;
+    console.log('Initializing NestJS app...');
+    try {
+      await bootstrap();
+      isInitialized = true;
+      console.log('NestJS app initialized successfully');
+    } catch (error) {
+      console.error('Error initializing NestJS app:', error);
+      return res.status(500).send('Error initializing app');
+    }
   }
+  console.log('Handling request with Express server');
   server(req, res);
 };
