@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { snippetService } from '../services/snippetService';
+import { useAuth } from '../context/AuthContext';
 import CodeBlock from '../components/CodeBlock';
 import { Button } from '../components/ui/Button';
 import { Loader2, Calendar, Tag, Trash2, ArrowLeft } from 'lucide-react';
@@ -9,6 +10,7 @@ export default function SnippetDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data: snippet, isLoading, error } = useQuery({
     queryKey: ['snippet', id],
@@ -44,6 +46,8 @@ export default function SnippetDetail() {
     );
   }
 
+  const isOwner = user?._id === snippet.userId;
+
   return (
     <div className="max-w-4xl mx-auto">
       <Button 
@@ -70,23 +74,25 @@ export default function SnippetDetail() {
                 </span>
               </div>
             </div>
-            <Button 
-              variant="outline" 
-              className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
-              onClick={() => {
-                if (confirm('Are you sure you want to delete this snippet?')) {
-                  deleteMutation.mutate(snippet._id);
-                }
-              }}
-              disabled={deleteMutation.isPending}
-            >
-              {deleteMutation.isPending ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Trash2 className="w-4 h-4 mr-2" />
-              )}
-              Delete
-            </Button>
+            {isOwner && (
+              <Button 
+                variant="outline" 
+                className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+                onClick={() => {
+                  if (confirm('Are you sure you want to delete this snippet?')) {
+                    deleteMutation.mutate(snippet._id);
+                  }
+                }}
+                disabled={deleteMutation.isPending}
+              >
+                {deleteMutation.isPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Trash2 className="w-4 h-4 mr-2" />
+                )}
+                Delete
+              </Button>
+            )}
           </div>
 
           {snippet.tags && snippet.tags.length > 0 && (
