@@ -24,8 +24,8 @@ export default function InsightProgress({ points = 0 }: InsightProgressProps) {
     const Icon = currentRank.icon;
 
     return (
-        <div className="flex flex-col gap-1.5 min-w-[140px] group">
-            <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
+        <div className="flex flex-col gap-1.5 min-w-[180px] group">
+            <div className="flex items-center justify-between gap-x-6 text-[10px] font-black uppercase tracking-widest">
                 <div className="flex items-center gap-1.5">
                     <Zap className="w-3 h-3 text-amber-500 fill-amber-500" />
                     <span className="text-slate-900">{points} Insights</span>
@@ -39,8 +39,8 @@ export default function InsightProgress({ points = 0 }: InsightProgressProps) {
             <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200/50">
                 <div
                     className={`h-full transition-all duration-500 ease-out rounded-full ${currentRank.label === 'Sage' ? 'bg-purple-500' :
-                            currentRank.label === 'Guardian' ? 'bg-indigo-500' :
-                                currentRank.label === 'Expert' ? 'bg-emerald-500' : 'bg-slate-400'
+                        currentRank.label === 'Guardian' ? 'bg-indigo-500' :
+                            currentRank.label === 'Expert' ? 'bg-emerald-500' : 'bg-slate-400'
                         }`}
                     style={{ width: `${progress}%` }}
                 />
