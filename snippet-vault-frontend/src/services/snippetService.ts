@@ -7,7 +7,8 @@ export const snippetService = {
     if (filters?.language) params.append('language', filters.language);
     if (filters?.tag) params.append('tag', filters.tag);
     if (filters?.search) params.append('search', filters.search);
-    
+    if (filters?.scope) params.append('scope', filters.scope);
+
     const response = await api.get<Snippet[]>('/snippets', { params });
     return response.data;
   },
