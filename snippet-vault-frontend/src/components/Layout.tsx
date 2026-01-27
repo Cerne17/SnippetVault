@@ -133,10 +133,10 @@ export default function Layout() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Theme Mode</span>
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="sm"
                     onClick={toggleThemeMode}
-                    className="gap-2"
+                    className="gap-2 bg-slate-50 dark:bg-slate-800"
                   >
                     {themeMode === 'light' ? (
                       <><Moon className="w-4 h-4" /> Dark Mode</>

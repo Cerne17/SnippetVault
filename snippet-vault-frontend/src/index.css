@@ -5,6 +5,8 @@
   --color-primary: var(--color-primary-dynamic);
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --color-primary-dynamic: #8b5cf6;
 }
