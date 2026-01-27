@@ -109,7 +109,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="columns-1 md:columns-2 gap-6 space-y-6">
+      <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
         {snippets?.map((snippet) => (
           <SnippetCard key={snippet._id} snippet={snippet} />
         ))}

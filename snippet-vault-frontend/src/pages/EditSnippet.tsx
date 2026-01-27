@@ -31,9 +31,8 @@ export default function EditSnippet() {
                 code: snippet.code,
                 isMarkdown: snippet.isMarkdown,
                 isPublic: snippet.isPublic,
-                tags: snippet.tags as any, // We'll handle the array-to-string transform soon
+                tags: snippet.tags as any,
             });
-            // Handle tags display: convert array to comma-separated string
             if (Array.isArray(snippet.tags)) {
                 setValue('tags', snippet.tags.join(', ') as any);
             }
@@ -69,23 +68,24 @@ export default function EditSnippet() {
     if (isLoadingSnippet) {
         return (
             <div className="flex justify-center items-center h-64">
-                <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
         );
     }
 
     return (
-        <div className="max-w-2xl mx-auto">
-            <h1 className="text-3xl font-bold mb-8">Edit Snippet</h1>
+        <div className="max-w-3xl mx-auto">
+            <h1 className="text-3xl font-black mb-8 text-slate-900 dark:text-white tracking-tight">Edit Snippet</h1>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider">
                         Title
                     </label>
                     <Input
                         {...register('title', { required: 'Title is required' })}
                         placeholder="e.g., React UseEffect Hook"
+                        className="dark:bg-slate-800 dark:border-slate-700 dark:text-white"
                     />
                     {errors.title && (
                         <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
@@ -93,23 +93,23 @@ export default function EditSnippet() {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider">
                         Description
                     </label>
                     <textarea
                         {...register('description')}
                         placeholder="A brief description of this snippet..."
-                        className="flex min-h-[80px] w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        className="flex min-h-[100px] w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all dark:text-white"
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider">
                         Language
                     </label>
                     <select
                         {...register('language', { required: 'Language is required' })}
-                        className="flex h-10 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        className="flex h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all dark:text-white appearance-none"
                     >
                         <option value="">Select a language</option>
                         <option value="javascript">JavaScript</option>
@@ -129,61 +129,64 @@ export default function EditSnippet() {
                     )}
                 </div>
 
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row gap-6 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl">
+                    <div className="flex items-center gap-3">
                         <input
                             type="checkbox"
                             id="isMarkdown"
                             {...register('isMarkdown')}
-                            className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500"
+                            className="w-5 h-5 text-primary border-slate-300 dark:border-slate-700 rounded focus:ring-primary bg-white dark:bg-slate-800"
                         />
-                        <label htmlFor="isMarkdown" className="text-sm font-medium text-slate-700">
+                        <label htmlFor="isMarkdown" className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-tight">
                             Render as Markdown
                         </label>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                         <input
                             type="checkbox"
                             id="isPublic"
                             {...register('isPublic')}
-                            className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500"
+                            className="w-5 h-5 text-primary border-slate-300 dark:border-slate-700 rounded focus:ring-primary bg-white dark:bg-slate-800"
                         />
-                        <label htmlFor="isPublic" className="text-sm font-medium text-slate-700">
+                        <label htmlFor="isPublic" className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-tight">
                             Make Public
                         </label>
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider">
                         Code
                     </label>
-                    <CodeEditor
-                        value={watch('code') || ''}
-                        onValueChange={(code) => setValue('code', code)}
-                        language={watch('language') || 'javascript'}
-                        placeholder="Paste your code here..."
-                    />
+                    <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+                        <CodeEditor
+                            value={watch('code') || ''}
+                            onValueChange={(code) => setValue('code', code)}
+                            language={watch('language') || 'javascript'}
+                            placeholder="Paste your code here..."
+                        />
+                    </div>
                     {errors.code && (
                         <p className="mt-1 text-sm text-red-600">{errors.code.message}</p>
                     )}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider">
                         Tags (comma separated)
                     </label>
                     <Input
                         {...register('tags')}
                         placeholder="react, hooks, frontend"
+                        className="dark:bg-slate-800 dark:border-slate-700 dark:text-white"
                     />
                 </div>
 
                 <div className="flex justify-end gap-4 pt-4">
                     <Button
                         type="button"
-                        variant="secondary"
+                        variant="ghost"
                         onClick={() => navigate(`/snippets/${id}`)}
                     >
                         Cancel
@@ -191,6 +194,8 @@ export default function EditSnippet() {
                     <Button
                         type="submit"
                         disabled={updateMutation.isPending}
+                        size="lg"
+                        className="px-8"
                     >
                         {updateMutation.isPending && (
                             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
