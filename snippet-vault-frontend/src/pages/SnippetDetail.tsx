@@ -140,7 +140,7 @@ export default function SnippetDetail() {
                 <button
                   onClick={() => amplifyMutation.mutate()}
                   disabled={!user || amplifyMutation.isPending}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-bold transition-all ${user && snippet.amplifiers.includes(user._id)
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-bold transition-all ${user && snippet.amplifiers?.includes(user._id)
                     ? 'bg-indigo-600 text-white shadow-md'
                     : 'text-slate-600 hover:bg-white hover:text-indigo-600'
                     } disabled:opacity-50`}
@@ -154,7 +154,7 @@ export default function SnippetDetail() {
                 <button
                   onClick={() => diminishMutation.mutate()}
                   disabled={!user || diminishMutation.isPending}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-bold transition-all ${user && snippet.diminishers.includes(user._id)
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-bold transition-all ${user && snippet.diminishers?.includes(user._id)
                     ? 'bg-slate-400 text-white shadow-md'
                     : 'text-slate-600 hover:bg-white hover:text-slate-900'
                     } disabled:opacity-50`}

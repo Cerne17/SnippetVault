@@ -11,8 +11,8 @@ export interface Snippet {
   isMarkdown?: boolean;
   isPublic?: boolean;
   insightScore: number;
-  amplifiers: string[];
-  diminishers: string[];
+  amplifiers?: string[];
+  diminishers?: string[];
 }
 
 export interface SnippetComment {
@@ -21,8 +21,8 @@ export interface SnippetComment {
   author: { _id: string; name: string; insightPoints: number };
   snippet: string;
   insightScore: number;
-  amplifiers: string[];
-  diminishers: string[];
+  amplifiers?: string[];
+  diminishers?: string[];
   createdAt: string;
 }
 
