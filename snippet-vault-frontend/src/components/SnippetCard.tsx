@@ -36,11 +36,11 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
   const author = typeof snippet.userId === 'object' ? snippet.userId : { name: 'Unknown', _id: '', insightPoints: 0 };
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full break-inside-avoid">
+    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full break-inside-avoid">
       <div className="p-5 flex-1 flex flex-col">
         <div className="mb-4">
           <Link to={`/snippets/${snippet._id}`} className="block group">
-            <h3 className="font-bold text-xl text-slate-900 group-hover:text-primary transition-colors leading-tight mb-3">
+            <h3 className="font-bold text-xl text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight mb-3">
               {snippet.title}
             </h3>
           </Link>
@@ -50,7 +50,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
             <div className="flex items-center justify-between text-xs text-slate-500">
               <div className="flex items-center gap-2">
                 <span className="font-medium">by</span>
-                <span className="font-bold text-slate-700">{author.name}</span>
+                <span className="font-bold text-slate-700 dark:text-slate-300">{author.name}</span>
                 {typeof snippet.userId === 'object' && (
                   <InsightBadge points={author.insightPoints} />
                 )}
@@ -65,7 +65,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
             <div className="flex items-center justify-between pt-1">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1.5">
-                  <div className="flex bg-slate-100 rounded-md p-0.5">
+                  <div className="flex bg-slate-100 dark:bg-slate-800 rounded-md p-0.5 border border-slate-200 dark:border-slate-700">
                     <button
                       onClick={(e) => { e.preventDefault(); e.stopPropagation(); amplifyMutation.mutate(); }}
                       disabled={!user || amplifyMutation.isPending}
@@ -77,7 +77,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
                     >
                       <TrendingUp className="w-3.5 h-3.5" />
                     </button>
-                    <span className="px-1.5 text-[11px] font-black text-slate-700 flex items-center">
+                    <span className="px-1.5 text-[11px] font-black text-slate-700 dark:text-slate-300 flex items-center">
                       {snippet.insightScore}
                     </span>
                     <button
@@ -85,7 +85,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
                       disabled={!user || diminishMutation.isPending}
                       className={`p-1 rounded transition-all ${user && snippet.diminishers?.includes(user._id)
                         ? 'bg-slate-400 text-white'
-                        : 'text-slate-500 hover:text-slate-900 hover:bg-white'
+                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700'
                         }`}
                       title="Diminish Knowledge"
                     >
@@ -100,12 +100,12 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
                 </div>
 
                 {snippet.isPublic && (
-                  <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-bold border border-emerald-100 text-[10px] uppercase tracking-wider">
+                  <span className="px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-100 dark:border-emerald-900 text-[10px] uppercase tracking-wider">
                     Public
                   </span>
                 )}
               </div>
-              <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 font-bold border border-slate-200 text-[10px] uppercase tracking-wider">
+              <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold border border-slate-200 dark:border-slate-700 text-[10px] uppercase tracking-wider">
                 {snippet.language}
               </span>
             </div>

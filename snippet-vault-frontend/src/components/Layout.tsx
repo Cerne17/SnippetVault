@@ -12,8 +12,8 @@ export default function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50 transition-colors duration-300">
-      <nav className="bg-white border-b border-slate-200 sticky top-0 z-50 transition-colors duration-300">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+      <nav className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
@@ -75,10 +75,10 @@ export default function Layout() {
                     <InsightProgress points={user.insightPoints} />
                   </div>
                   <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
+                    <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-700">
                       <User className="w-4 h-4" />
                     </div>
-                    <span className="hidden sm:inline font-bold text-slate-900">{user.name}</span>
+                    <span className="hidden sm:inline font-bold text-slate-900 dark:text-white">{user.name}</span>
                   </div>
                   <Link to="/create">
                     <Button size="sm" className="gap-2">

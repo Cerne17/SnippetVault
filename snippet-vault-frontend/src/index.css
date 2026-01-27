@@ -47,10 +47,7 @@ body {
   --tw-ring-color: var(--color-primary-dynamic) !important;
 }
 
-/* Ensure dark mode overrides for cards and nav */
-.dark .bg-white {
-  @apply bg-slate-900 border-slate-800;
-}
+/* Ensure dark mode overrides for basic text colors and backgrounds */
 
 .dark .bg-slate-50 {
   @apply bg-slate-950;
