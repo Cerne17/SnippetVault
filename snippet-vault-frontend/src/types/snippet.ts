@@ -13,6 +13,7 @@ export interface Snippet {
   insightScore: number;
   amplifiers?: string[];
   diminishers?: string[];
+  commentCount?: number;
 }
 
 export interface SnippetComment {

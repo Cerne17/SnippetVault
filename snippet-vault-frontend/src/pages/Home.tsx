@@ -73,8 +73,8 @@ export default function Home() {
           <button
             onClick={() => setScope('mine')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-all ${scope === 'mine'
-                ? 'bg-white text-indigo-600 shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white text-indigo-600 shadow-sm'
+              : 'text-slate-600 hover:text-slate-900'
               }`}
           >
             <UserIcon className="w-4 h-4" />
@@ -83,8 +83,8 @@ export default function Home() {
           <button
             onClick={() => setScope('public')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-all ${scope === 'public'
-                ? 'bg-white text-indigo-600 shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white text-indigo-600 shadow-sm'
+              : 'text-slate-600 hover:text-slate-900'
               }`}
           >
             <Globe className="w-4 h-4" />
@@ -93,7 +93,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="columns-1 md:columns-2 gap-6 space-y-6">
         {snippets?.map((snippet) => (
           <SnippetCard key={snippet._id} snippet={snippet} />
         ))}

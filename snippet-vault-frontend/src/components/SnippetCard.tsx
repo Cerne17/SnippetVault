@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { snippetService } from '../services/snippetService';
+import { useAuth } from '../context/AuthContext';
 import type { Snippet } from '../types/snippet';
 import CodeBlock from './CodeBlock';
-import { Calendar, Tag, ChevronRight } from 'lucide-react';
+import { Calendar, Tag, ChevronRight, TrendingUp, TrendingDown, MessageSquare } from 'lucide-react';
 import InsightBadge from './InsightBadge';
 
 interface SnippetCardProps {
@@ -9,8 +12,29 @@ interface SnippetCardProps {
 }
 
 export default function SnippetCard({ snippet }: SnippetCardProps) {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const amplifyMutation = useMutation({
+    mutationFn: () => snippetService.amplify(snippet._id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['snippets'] });
+      queryClient.invalidateQueries({ queryKey: ['snippet', snippet._id] });
+    },
+  });
+
+  const diminishMutation = useMutation({
+    mutationFn: () => snippetService.diminish(snippet._id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['snippets'] });
+      queryClient.invalidateQueries({ queryKey: ['snippet', snippet._id] });
+    },
+  });
+
+  const author = typeof snippet.userId === 'object' ? snippet.userId : { name: 'Unknown', _id: '', insightPoints: 0 };
+
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full">
+    <div className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full break-inside-avoid">
       <div className="p-5 flex-1 flex flex-col">
         <div className="mb-4">
           <Link to={`/snippets/${snippet._id}`} className="block group">
@@ -24,9 +48,9 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
             <div className="flex items-center justify-between text-xs text-slate-500">
               <div className="flex items-center gap-2">
                 <span className="font-medium">by</span>
-                <span className="font-bold text-slate-700">{typeof snippet.userId === 'object' ? snippet.userId.name : 'Unknown'}</span>
+                <span className="font-bold text-slate-700">{author.name}</span>
                 {typeof snippet.userId === 'object' && (
-                  <InsightBadge points={snippet.userId.insightPoints} />
+                  <InsightBadge points={author.insightPoints} />
                 )}
               </div>
               <span className="flex items-center gap-1 font-medium italic">
@@ -35,21 +59,47 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
               </span>
             </div>
 
-            {/* Row 2: Status Pills and Language */}
+            {/* Row 2: Status Pills, Analytics and Language */}
             <div className="flex items-center justify-between pt-1">
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 font-black border border-indigo-100 text-[10px] uppercase tracking-wider">
-                  <span>Insight</span>
-                  <span className="text-xs">{snippet.insightScore}</span>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5">
+                  <div className="flex bg-slate-100 rounded-md p-0.5">
+                    <button
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); amplifyMutation.mutate(); }}
+                      disabled={!user || amplifyMutation.isPending}
+                      className={`p-1 rounded transition-all ${user && snippet.amplifiers?.includes(user._id)
+                          ? 'bg-indigo-600 text-white'
+                          : 'text-slate-500 hover:text-indigo-600 hover:bg-white'
+                        }`}
+                      title="Amplify Knowledge"
+                    >
+                      <TrendingUp className="w-3.5 h-3.5" />
+                    </button>
+                    <span className="px-1.5 text-[11px] font-black text-slate-700 flex items-center">
+                      {snippet.insightScore}
+                    </span>
+                    <button
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); diminishMutation.mutate(); }}
+                      disabled={!user || diminishMutation.isPending}
+                      className={`p-1 rounded transition-all ${user && snippet.diminishers?.includes(user._id)
+                          ? 'bg-slate-400 text-white'
+                          : 'text-slate-500 hover:text-slate-900 hover:bg-white'
+                        }`}
+                      title="Diminish Knowledge"
+                    >
+                      <TrendingDown className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
+
+                <div className="flex items-center gap-1.5 text-slate-400 group/comments">
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span className="text-[11px] font-bold">{snippet.commentCount || 0}</span>
+                </div>
+
                 {snippet.isPublic && (
                   <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-bold border border-emerald-100 text-[10px] uppercase tracking-wider">
                     Public
-                  </span>
-                )}
-                {snippet.isMarkdown && (
-                  <span className="px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 font-bold border border-purple-100 text-[10px] uppercase tracking-wider">
-                    Markdown
                   </span>
                 )}
               </div>
@@ -60,11 +110,11 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
           </div>
         </div>
 
-        <div className="flex-1 min-h-0 relative group rounded-lg overflow-hidden border border-slate-100">
+        <div className="max-h-80 overflow-hidden relative group rounded-lg border border-slate-100">
           <CodeBlock code={snippet.code} language={snippet.language} isMarkdown={snippet.isMarkdown} />
 
           {/* Enhanced Dark Hover Overlay */}
-          <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none flex items-center justify-center backdrop-blur-[1px]">
+          <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none flex items-center justify-center backdrop-blur-[2px]">
             <Link
               to={`/snippets/${snippet._id}`}
               className="pointer-events-auto flex items-center gap-2 px-5 py-2.5 bg-white text-slate-900 rounded-full font-bold text-sm shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-indigo-600 hover:text-white"
@@ -75,7 +125,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
           </div>
 
           {/* Subtle bottom fade for non-hover state */}
-          <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-slate-900/10 to-transparent pointer-events-none group-hover:hidden" />
+          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-slate-900/40 to-transparent pointer-events-none group-hover:hidden" />
         </div>
 
         {snippet.tags && snippet.tags.length > 0 && (

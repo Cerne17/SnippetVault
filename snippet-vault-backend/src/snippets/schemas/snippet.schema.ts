@@ -45,6 +45,9 @@ export class Snippet {
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
     diminishers: mongoose.Types.ObjectId[];
+
+    @Prop({ type: Number, default: 0 })
+    commentCount: number;
 }
 
 export const SnippetSchema = SchemaFactory.createForClass(Snippet);

@@ -4,12 +4,14 @@ import { Model } from 'mongoose';
 import { Comment, CommentDocument } from './schemas/comment.schema';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { User } from '../users/schemas/user.schema';
+import { Snippet } from '../snippets/schemas/snippet.schema';
 
 @Injectable()
 export class CommentsService {
     constructor(
         @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
         @InjectModel(User.name) private userModel: Model<User>,
+        @InjectModel(Snippet.name) private snippetModel: Model<Snippet>,
     ) { }
 
     async create(createCommentDto: CreateCommentDto, userId: string): Promise<Comment> {
@@ -20,6 +22,11 @@ export class CommentsService {
         });
 
         const savedComment = await newComment.save();
+
+        // Increment comment count on the snippet
+        await this.snippetModel.findByIdAndUpdate(createCommentDto.snippetId, {
+            $inc: { commentCount: 1 },
+        });
 
         // Reward the author with 1 Insight Point for contributing
         await this.userModel.findByIdAndUpdate(userId, {

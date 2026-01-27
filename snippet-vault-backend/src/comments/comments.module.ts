@@ -4,12 +4,14 @@ import { CommentsService } from './comments.service';
 import { CommentsController } from './comments.controller';
 import { Comment, CommentSchema } from './schemas/comment.schema';
 import { User, UserSchema } from '../users/schemas/user.schema';
+import { Snippet, SnippetSchema } from '../snippets/schemas/snippet.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Comment.name, schema: CommentSchema },
       { name: User.name, schema: UserSchema },
+      { name: Snippet.name, schema: SnippetSchema },
     ]),
   ],
   controllers: [CommentsController],
