@@ -28,20 +28,21 @@ export class Snippet {
     @Prop({ type: Date, default: null })
     updatedAt: Date | null;
 
-    @Prop({ type: Date, default: null })
-    deletedAt: Date | null;
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true })
+    userId: User;
 
-    @Prop({ type: Date, default: null })
-    favoritedAt: Date | null;
-
-    @Prop({ type: Boolean, default: false })
-    isMarkdown: boolean;
-
-    @Prop({ type: Boolean, default: false })
+    @Prop({ type: Boolean, default: false, index: true })
     isPublic: boolean;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
-    userId: User;
+    @Prop({ type: Date, default: null, index: true })
+    deletedAt: Date | null;
 }
 
 export const SnippetSchema = SchemaFactory.createForClass(Snippet);
+
+// Compound index for common filter patterns
+SnippetSchema.index({ deletedAt: 1, isPublic: 1 });
+SnippetSchema.index({ deletedAt: 1, userId: 1 });
+
+// Text index for search optimization
+SnippetSchema.index({ title: 'text', description: 'text' });

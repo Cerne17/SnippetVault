@@ -47,14 +47,14 @@ export class SnippetsService {
 
     if (search) {
       conditions.push({
-        $or: [
-          { title: { $regex: search, $options: 'i' } },
-          { code: { $regex: search, $options: 'i' } },
-        ],
+        $text: { $search: search }
       });
     }
 
-    return this.snippetModel.find({ $and: conditions }).populate('userId', 'name').exec();
+    return this.snippetModel.find({ $and: conditions })
+      .populate('userId', 'name')
+      .lean()
+      .exec() as unknown as Promise<Snippet[]>;
   }
 
   findOne(id: string, userId?: string): Promise<Snippet> {
@@ -66,7 +66,10 @@ export class SnippetsService {
       conditions.push({ isPublic: true });
     }
 
-    return this.snippetModel.findOne({ $and: conditions }).populate('userId', 'name').exec();
+    return this.snippetModel.findOne({ $and: conditions })
+      .populate('userId', 'name')
+      .lean()
+      .exec() as unknown as Promise<Snippet>;
   }
 
   update(id: string, updateSnippetDto: UpdateSnippetDto, userId: string): Promise<Snippet> {
