@@ -9,7 +9,7 @@ import type { FilterSnippetDto } from './dto/filter-snippet.dto';
 @Injectable()
 export class SnippetsService {
 
-  constructor(@InjectModel(Snippet.name) private snippetModel: Model<Snippet>) {}
+  constructor(@InjectModel(Snippet.name) private snippetModel: Model<Snippet>) { }
 
   async create(createSnippetDto: CreateSnippetDto, userId: string): Promise<Snippet> {
     const newSnippet = new this.snippetModel({
@@ -20,9 +20,9 @@ export class SnippetsService {
     return newSnippet.save();
   }
 
-  findAll(filterDto: FilterSnippetDto): Promise<Snippet[]> {
+  findAll(filterDto: FilterSnippetDto, userId: string): Promise<Snippet[]> {
     const { language, tag } = filterDto;
-    const query: any = { deletedAt: null };
+    const query: any = { deletedAt: null, userId };
 
     if (language) {
       query.language = { $regex: language, $options: 'i' };
@@ -42,19 +42,19 @@ export class SnippetsService {
     return this.snippetModel.find(query).populate('userId', 'name').exec();
   }
 
-  findOne(id: string): Promise<Snippet> {
-    return this.snippetModel.findOne({ _id: id, deletedAt: null }).populate('userId', 'name').exec();
+  findOne(id: string, userId: string): Promise<Snippet> {
+    return this.snippetModel.findOne({ _id: id, userId, deletedAt: null }).populate('userId', 'name').exec();
   }
 
-  update(id: string, updateSnippetDto: UpdateSnippetDto): Promise<Snippet> {
+  update(id: string, updateSnippetDto: UpdateSnippetDto, userId: string): Promise<Snippet> {
     return this.snippetModel
-      .findByIdAndUpdate(id, updateSnippetDto, { new: true })
+      .findOneAndUpdate({ _id: id, userId }, updateSnippetDto, { new: true })
       .exec();
   }
 
-  remove(id: string): Promise<Snippet> {
+  remove(id: string, userId: string): Promise<Snippet> {
     return this.snippetModel
-      .findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true })
+      .findOneAndUpdate({ _id: id, userId }, { deletedAt: new Date() }, { new: true })
       .exec();
   }
 }

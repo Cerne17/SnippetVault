@@ -13,12 +13,12 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="snippets/:id" element={<SnippetDetail />} />
-          
+
           <Route element={<ProtectedRoute />}>
+            <Route index element={<Home />} />
+            <Route path="snippets/:id" element={<SnippetDetail />} />
             <Route path="create" element={<CreateSnippet />} />
           </Route>
         </Route>
