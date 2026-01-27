@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import CreateSnippet from './pages/CreateSnippet';
+import EditSnippet from './pages/EditSnippet';
 import SnippetDetail from './pages/SnippetDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -20,6 +21,7 @@ function App() {
 
           <Route element={<ProtectedRoute />}>
             <Route path="create" element={<CreateSnippet />} />
+            <Route path="snippets/:id/edit" element={<EditSnippet />} />
           </Route>
         </Route>
       </Routes>

@@ -3,6 +3,7 @@ export interface Snippet {
   title: string;
   code: string;
   language: string;
+  description?: string;
   tags: string[];
   createdAt: string;
   updatedAt: string;
@@ -15,6 +16,7 @@ export interface CreateSnippetDto {
   title: string;
   code: string;
   language: string;
+  description?: string;
   tags?: string[];
   isMarkdown?: boolean;
   isPublic?: boolean;

@@ -6,6 +6,10 @@ export class CreateSnippetDto {
   title: string;
 
   @IsString()
+  @IsOptional()
+  description?: string;
+
+  @IsString()
   @IsNotEmpty()
   code: string;
 

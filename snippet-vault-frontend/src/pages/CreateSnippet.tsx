@@ -72,6 +72,17 @@ export default function CreateSnippet() {
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
+            Description
+          </label>
+          <textarea
+            {...register('description')}
+            placeholder="A brief description of this snippet..."
+            className="flex min-h-[80px] w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
             Language
           </label>
           <select
@@ -165,7 +176,7 @@ export default function CreateSnippet() {
             Create Snippet
           </Button>
         </div>
-      </form>
-    </div>
+      </form >
+    </div >
   );
 }

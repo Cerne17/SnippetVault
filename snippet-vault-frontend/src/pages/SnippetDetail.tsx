@@ -4,7 +4,7 @@ import { snippetService } from '../services/snippetService';
 import { useAuth } from '../context/AuthContext';
 import CodeBlock from '../components/CodeBlock';
 import { Button } from '../components/ui/Button';
-import { Loader2, Calendar, Tag, Trash2, ArrowLeft } from 'lucide-react';
+import { Loader2, Calendar, Tag, Trash2, ArrowLeft, Pencil } from 'lucide-react';
 
 export default function SnippetDetail() {
   const { id } = useParams<{ id: string }>();
@@ -79,25 +79,39 @@ export default function SnippetDetail() {
                 </span>
                 <span className="text-slate-400">by {typeof snippet.userId === 'object' ? snippet.userId.name : 'Unknown'}</span>
               </div>
+              {snippet.description && (
+                <p className="mt-4 text-slate-600 leading-relaxed max-w-2xl">
+                  {snippet.description}
+                </p>
+              )}
             </div>
             {isOwner && (
-              <Button
-                variant="outline"
-                className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
-                onClick={() => {
-                  if (confirm('Are you sure you want to delete this snippet?')) {
-                    deleteMutation.mutate(snippet._id);
-                  }
-                }}
-                disabled={deleteMutation.isPending}
-              >
-                {deleteMutation.isPending ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Trash2 className="w-4 h-4 mr-2" />
-                )}
-                Delete
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => navigate(`/snippets/${snippet._id}/edit`)}
+                >
+                  <Pencil className="w-4 h-4 mr-2" />
+                  Edit
+                </Button>
+                <Button
+                  variant="outline"
+                  className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+                  onClick={() => {
+                    if (confirm('Are you sure you want to delete this snippet?')) {
+                      deleteMutation.mutate(snippet._id);
+                    }
+                  }}
+                  disabled={deleteMutation.isPending}
+                >
+                  {deleteMutation.isPending ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Trash2 className="w-4 h-4 mr-2" />
+                  )}
+                  Delete
+                </Button>
+              </div>
             )}
           </div>
 

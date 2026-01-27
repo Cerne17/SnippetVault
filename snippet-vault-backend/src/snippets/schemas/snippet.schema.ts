@@ -10,6 +10,9 @@ export class Snippet {
     @Prop({ required: true })
     title: string;
 
+    @Prop()
+    description: string;
+
     @Prop({ required: true })
     code: string;
 
