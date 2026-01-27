@@ -7,9 +7,23 @@ export interface Snippet {
   tags: string[];
   createdAt: string;
   updatedAt: string;
-  userId: string | { _id: string; name: string };
+  userId: string | { _id: string; name: string; insightPoints?: number };
   isMarkdown?: boolean;
   isPublic?: boolean;
+  insightScore: number;
+  amplifiers: string[];
+  diminishers: string[];
+}
+
+export interface SnippetComment {
+  _id: string;
+  content: string;
+  author: { _id: string; name: string; insightPoints: number };
+  snippet: string;
+  insightScore: number;
+  amplifiers: string[];
+  diminishers: string[];
+  createdAt: string;
 }
 
 export interface CreateSnippetDto {

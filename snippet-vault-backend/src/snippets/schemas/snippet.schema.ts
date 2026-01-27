@@ -36,6 +36,15 @@ export class Snippet {
 
     @Prop({ type: Date, default: null, index: true })
     deletedAt: Date | null;
+
+    @Prop({ type: Number, default: 0, index: true })
+    insightScore: number;
+
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+    amplifiers: mongoose.Types.ObjectId[];
+
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+    diminishers: mongoose.Types.ObjectId[];
 }
 
 export const SnippetSchema = SchemaFactory.createForClass(Snippet);

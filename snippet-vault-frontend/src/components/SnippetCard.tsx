@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import type { Snippet } from '../types/snippet';
 import CodeBlock from './CodeBlock';
 import { Calendar, Tag } from 'lucide-react';
+import InsightBadge from './InsightBadge';
 
 interface SnippetCardProps {
   snippet: Snippet;
@@ -11,20 +12,29 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
       <div className="p-5">
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <Link to={`/snippets/${snippet._id}`} className="block group">
-              <h3 className="font-bold text-lg text-slate-900 group-hover:text-indigo-600 transition-colors">
-                {snippet.title}
-              </h3>
-            </Link>
-            <div className="flex items-center justify-between text-sm text-slate-500">
-              <div className="flex items-center gap-4">
-                <span className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4" />
-                  {new Date(snippet.createdAt).toLocaleDateString()}
-                </span>
+        <div className="mb-4">
+          <Link to={`/snippets/${snippet._id}`} className="block group">
+            <h3 className="font-bold text-lg text-slate-900 group-hover:text-indigo-600 transition-colors">
+              {snippet.title}
+            </h3>
+          </Link>
+          <div className="flex items-center justify-between text-sm text-slate-500 mt-1">
+            <div className="flex items-center gap-3">
+              <span className="flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
+                {new Date(snippet.createdAt).toLocaleDateString()}
+              </span>
+              <div className="flex items-center gap-2">
                 <span>by {typeof snippet.userId === 'object' ? snippet.userId.name : 'Unknown'}</span>
+                {typeof snippet.userId === 'object' && (
+                  <InsightBadge points={snippet.userId.insightPoints} />
+                )}
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 font-bold border border-indigo-100">
+                <span className="text-xs uppercase tracking-wider">Insight</span>
+                <span>{snippet.insightScore}</span>
               </div>
               <div className="flex items-center gap-2">
                 {snippet.isPublic && (

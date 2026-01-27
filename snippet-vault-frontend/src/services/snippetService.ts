@@ -1,5 +1,5 @@
 import { api } from './api';
-import type { Snippet, CreateSnippetDto, UpdateSnippetDto, FilterSnippetDto } from '../types/snippet';
+import type { Snippet, CreateSnippetDto, UpdateSnippetDto, FilterSnippetDto, SnippetComment } from '../types/snippet';
 
 export const snippetService = {
   getAll: async (filters?: FilterSnippetDto): Promise<Snippet[]> => {
@@ -30,5 +30,25 @@ export const snippetService = {
 
   delete: async (id: string): Promise<void> => {
     await api.delete(`/snippets/${id}`);
+  },
+
+  amplify: async (id: string): Promise<Snippet> => {
+    const response = await api.post<Snippet>(`/snippets/${id}/amplify`);
+    return response.data;
+  },
+
+  diminish: async (id: string): Promise<Snippet> => {
+    const response = await api.post<Snippet>(`/snippets/${id}/diminish`);
+    return response.data;
+  },
+
+  getComments: async (snippetId: string): Promise<SnippetComment[]> => {
+    const response = await api.get<SnippetComment[]>('/comments', { params: { snippetId } });
+    return response.data;
+  },
+
+  createComment: async (content: string, snippetId: string): Promise<SnippetComment> => {
+    const response = await api.post<SnippetComment>('/comments', { content, snippetId });
+    return response.data;
   }
 };

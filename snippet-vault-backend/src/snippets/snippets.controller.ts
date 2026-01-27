@@ -40,4 +40,16 @@ export class SnippetsController {
   remove(@Param('id') id: string, @Request() req) {
     return this.snippetsService.remove(id, req.user.userId);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':id/amplify')
+  amplify(@Param('id') id: string, @Request() req) {
+    return this.snippetsService.amplify(id, req.user.userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':id/diminish')
+  diminish(@Param('id') id: string, @Request() req) {
+    return this.snippetsService.diminish(id, req.user.userId);
+  }
 }
