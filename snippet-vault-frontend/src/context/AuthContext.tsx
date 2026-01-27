@@ -10,6 +10,7 @@ interface AuthContextType {
   login: (data: LoginDto) => Promise<void>;
   register: (data: RegisterDto) => Promise<void>;
   logout: () => void;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,46 +22,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      try {
-        const decoded = jwtDecode<any>(token);
-        // Check if token is expired
-        if (decoded.exp * 1000 < Date.now()) {
-          logout();
-        } else {
-          setUser({
-            _id: decoded.sub,
-            email: decoded.email,
-            name: decoded.name || 'User', // Name might not be in token depending on backend implementation
-          });
-        }
-      } catch (error) {
-        console.error('Invalid token:', error);
+      const decoded = jwtDecode<any>(token);
+      if (decoded.exp * 1000 < Date.now()) {
         logout();
+      } else {
+        refreshUser();
       }
+    } else {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
+
+  const refreshUser = async () => {
+    try {
+      const userData = await authService.getProfile();
+      setUser(userData);
+    } catch (error) {
+      console.error('Failed to refresh user:', error);
+      logout();
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const login = async (data: LoginDto) => {
     const response = await authService.login(data);
     localStorage.setItem('token', response.access_token);
-    const decoded = jwtDecode<any>(response.access_token);
-    setUser({
-      _id: decoded.sub,
-      email: decoded.email,
-      name: decoded.name || 'User',
-    });
+    await refreshUser();
   };
 
   const register = async (data: RegisterDto) => {
     const response = await authService.register(data);
     localStorage.setItem('token', response.access_token);
-    const decoded = jwtDecode<any>(response.access_token);
-    setUser({
-      _id: decoded.sub,
-      email: decoded.email,
-      name: decoded.name || 'User',
-    });
+    await refreshUser();
   };
 
   const logout = () => {
@@ -69,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, login, register, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

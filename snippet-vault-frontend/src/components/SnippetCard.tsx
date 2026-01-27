@@ -12,7 +12,7 @@ interface SnippetCardProps {
 }
 
 export default function SnippetCard({ snippet }: SnippetCardProps) {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const queryClient = useQueryClient();
 
   const amplifyMutation = useMutation({
@@ -20,6 +20,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['snippets'] });
       queryClient.invalidateQueries({ queryKey: ['snippet', snippet._id] });
+      refreshUser();
     },
   });
 
@@ -28,6 +29,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['snippets'] });
       queryClient.invalidateQueries({ queryKey: ['snippet', snippet._id] });
+      refreshUser();
     },
   });
 
@@ -68,8 +70,8 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
                       onClick={(e) => { e.preventDefault(); e.stopPropagation(); amplifyMutation.mutate(); }}
                       disabled={!user || amplifyMutation.isPending}
                       className={`p-1 rounded transition-all ${user && snippet.amplifiers?.includes(user._id)
-                          ? 'bg-indigo-600 text-white'
-                          : 'text-slate-500 hover:text-indigo-600 hover:bg-white'
+                        ? 'bg-indigo-600 text-white'
+                        : 'text-slate-500 hover:text-indigo-600 hover:bg-white'
                         }`}
                       title="Amplify Knowledge"
                     >
@@ -82,8 +84,8 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
                       onClick={(e) => { e.preventDefault(); e.stopPropagation(); diminishMutation.mutate(); }}
                       disabled={!user || diminishMutation.isPending}
                       className={`p-1 rounded transition-all ${user && snippet.diminishers?.includes(user._id)
-                          ? 'bg-slate-400 text-white'
-                          : 'text-slate-500 hover:text-slate-900 hover:bg-white'
+                        ? 'bg-slate-400 text-white'
+                        : 'text-slate-500 hover:text-slate-900 hover:bg-white'
                         }`}
                       title="Diminish Knowledge"
                     >

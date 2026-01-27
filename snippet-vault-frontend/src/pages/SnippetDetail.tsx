@@ -12,7 +12,7 @@ export default function SnippetDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
 
   const { data: snippet, isLoading, error } = useQuery({
     queryKey: ['snippet', id],
@@ -32,6 +32,7 @@ export default function SnippetDetail() {
     mutationFn: () => snippetService.amplify(id!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['snippet', id] });
+      refreshUser();
     },
   });
 
@@ -39,6 +40,7 @@ export default function SnippetDetail() {
     mutationFn: () => snippetService.diminish(id!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['snippet', id] });
+      refreshUser();
     },
   });
 

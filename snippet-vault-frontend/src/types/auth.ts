@@ -2,6 +2,7 @@ export interface User {
   _id: string;
   email: string;
   name: string;
+  insightPoints?: number;
 }
 
 export interface AuthResponse {

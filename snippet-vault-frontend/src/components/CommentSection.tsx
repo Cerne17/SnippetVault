@@ -11,7 +11,7 @@ interface CommentSectionProps {
 }
 
 export default function CommentSection({ snippetId }: CommentSectionProps) {
-    const { user } = useAuth();
+    const { user, refreshUser } = useAuth();
     const queryClient = useQueryClient();
     const [content, setContent] = useState('');
 
@@ -27,6 +27,7 @@ export default function CommentSection({ snippetId }: CommentSectionProps) {
             queryClient.invalidateQueries({ queryKey: ['comments', snippetId] });
             // Points might have changed for the current user
             queryClient.invalidateQueries({ queryKey: ['snippet', snippetId] });
+            refreshUser();
         },
     });
 

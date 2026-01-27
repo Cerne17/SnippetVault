@@ -9,7 +9,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneByEmail(email);
@@ -32,5 +32,15 @@ export class AuthService {
     const { email, password, name } = registerDto;
     const user = await this.usersService.create(email, password, name);
     return this.login(user);
+  }
+
+  async getProfile(userId: string) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const user = await this.usersService.findOneById(userId);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    const { passwordHash, ...result } = (user as any).toObject ? (user as any).toObject() : user;
+    return result;
   }
 }

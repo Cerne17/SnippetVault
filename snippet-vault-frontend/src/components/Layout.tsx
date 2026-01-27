@@ -2,6 +2,7 @@ import { Outlet, Link } from 'react-router-dom';
 import { Code2, Plus, LogIn, LogOut, User } from 'lucide-react';
 import { Button } from './ui/Button';
 import { useAuth } from '../context/AuthContext';
+import InsightProgress from './InsightProgress';
 
 export default function Layout() {
   const { user, logout } = useAuth();
@@ -19,12 +20,17 @@ export default function Layout() {
                 <span className="font-bold text-xl text-slate-900">SnippetVault</span>
               </Link>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               {user ? (
                 <>
-                  <div className="flex items-center gap-2 text-sm text-slate-600 mr-2">
-                    <User className="w-4 h-4" />
-                    <span className="hidden sm:inline">{user.name}</span>
+                  <div className="hidden lg:block border-r border-slate-100 pr-6 h-10 my-auto">
+                    <InsightProgress points={user.insightPoints} />
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-slate-600">
+                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
+                      <User className="w-4 h-4" />
+                    </div>
+                    <span className="hidden sm:inline font-bold text-slate-900">{user.name}</span>
                   </div>
                   <Link to="/create">
                     <Button size="sm" className="gap-2">
