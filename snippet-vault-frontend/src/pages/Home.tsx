@@ -31,7 +31,7 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -75,8 +75,8 @@ export default function Home() {
           <button
             onClick={() => setScope('mine')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-all ${scope === 'mine'
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
           >
             <UserIcon className="w-4 h-4" />
@@ -85,8 +85,8 @@ export default function Home() {
           <button
             onClick={() => setScope('public')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-all ${scope === 'public'
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
           >
             <Globe className="w-4 h-4" />

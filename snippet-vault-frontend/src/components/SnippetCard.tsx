@@ -1,37 +1,16 @@
 import { Link } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { snippetService } from '../services/snippetService';
-import { useAuth } from '../context/AuthContext';
+import { useSnippetActions } from '../hooks/useSnippetActions';
 import type { Snippet } from '../types/snippet';
 import CodeBlock from './CodeBlock';
 import { Calendar, Tag, ChevronRight, TrendingUp, TrendingDown, MessageSquare } from 'lucide-react';
-import InsightBadge from './InsightBadge';
+import InsightBadge from './ui/InsightBadge';
 
 interface SnippetCardProps {
   snippet: Snippet;
 }
 
 export default function SnippetCard({ snippet }: SnippetCardProps) {
-  const { user, refreshUser } = useAuth();
-  const queryClient = useQueryClient();
-
-  const amplifyMutation = useMutation({
-    mutationFn: () => snippetService.amplify(snippet._id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['snippets'] });
-      queryClient.invalidateQueries({ queryKey: ['snippet', snippet._id] });
-      refreshUser();
-    },
-  });
-
-  const diminishMutation = useMutation({
-    mutationFn: () => snippetService.diminish(snippet._id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['snippets'] });
-      queryClient.invalidateQueries({ queryKey: ['snippet', snippet._id] });
-      refreshUser();
-    },
-  });
+  const { amplify, diminish, isAmplifying, isDiminishing, user } = useSnippetActions(snippet._id);
 
   const author = typeof snippet.userId === 'object' ? snippet.userId : { name: 'Unknown', _id: '', insightPoints: 0 };
 
@@ -67,8 +46,8 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
                 <div className="flex items-center gap-1.5">
                   <div className="flex bg-slate-100 dark:bg-slate-800 rounded-md p-0.5 border border-slate-200 dark:border-slate-700">
                     <button
-                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); amplifyMutation.mutate(); }}
-                      disabled={!user || amplifyMutation.isPending}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); amplify(); }}
+                      disabled={!user || isAmplifying}
                       className={`p-1 rounded transition-all ${user && snippet.amplifiers?.includes(user._id)
                         ? 'bg-primary text-white'
                         : 'text-slate-500 hover:text-primary hover:bg-white dark:hover:bg-slate-700'
@@ -81,8 +60,8 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
                       {snippet.insightScore}
                     </span>
                     <button
-                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); diminishMutation.mutate(); }}
-                      disabled={!user || diminishMutation.isPending}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); diminish(); }}
+                      disabled={!user || isDiminishing}
                       className={`p-1 rounded transition-all ${user && snippet.diminishers?.includes(user._id)
                         ? 'bg-slate-400 text-white'
                         : 'text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700'

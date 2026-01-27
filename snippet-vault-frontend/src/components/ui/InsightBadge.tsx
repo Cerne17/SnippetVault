@@ -10,7 +10,7 @@ export default function InsightBadge({ points = 0 }: InsightBadgeProps) {
     if (points >= 500) {
         rank = { label: 'Sage', color: 'text-purple-600 bg-purple-50', icon: Wand2 };
     } else if (points >= 100) {
-        rank = { label: 'Guardian', color: 'text-indigo-600 bg-indigo-50', icon: Shield };
+        rank = { label: 'Guardian', color: 'text-primary bg-primary/10', icon: Shield };
     } else if (points >= 10) {
         rank = { label: 'Expert', color: 'text-emerald-600 bg-emerald-50', icon: Sparkles };
     }

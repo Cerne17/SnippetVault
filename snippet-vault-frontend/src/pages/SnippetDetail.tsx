@@ -5,15 +5,16 @@ import { useAuth } from '../context/AuthContext';
 import CodeBlock from '../components/CodeBlock';
 import { Button } from '../components/ui/Button';
 import { Loader2, Calendar, Tag, Trash2, ArrowLeft, Pencil, TrendingUp, TrendingDown, Download, FileJson, User } from 'lucide-react';
-import InsightBadge from '../components/InsightBadge';
+import InsightBadge from '../components/ui/InsightBadge';
 import CommentSection from '../components/CommentSection';
 import { exportSnippetAsJson, exportSnippetAsSource } from '../utils/fileUtils';
+import { useSnippetActions } from '../hooks/useSnippetActions';
 
 export default function SnippetDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user, refreshUser } = useAuth();
+  const { user } = useAuth();
 
   const { data: snippet, isLoading, error } = useQuery({
     queryKey: ['snippet', id],
@@ -29,21 +30,7 @@ export default function SnippetDetail() {
     },
   });
 
-  const amplifyMutation = useMutation({
-    mutationFn: () => snippetService.amplify(id!),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['snippet', id] });
-      refreshUser();
-    },
-  });
-
-  const diminishMutation = useMutation({
-    mutationFn: () => snippetService.diminish(id!),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['snippet', id] });
-      refreshUser();
-    },
-  });
+  const { amplify, diminish, isAmplifying, isDiminishing } = useSnippetActions(id!);
 
   if (isLoading) {
     return (
@@ -151,8 +138,8 @@ export default function SnippetDetail() {
 
             <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl self-start md:self-auto">
               <button
-                onClick={() => amplifyMutation.mutate()}
-                disabled={!user || amplifyMutation.isPending}
+                onClick={() => amplify()}
+                disabled={!user || isAmplifying}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${user && snippet.amplifiers?.includes(user._id)
                   ? 'bg-primary text-white shadow-lg'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700 hover:text-primary'
@@ -165,8 +152,8 @@ export default function SnippetDetail() {
                 {snippet.insightScore}
               </div>
               <button
-                onClick={() => diminishMutation.mutate()}
-                disabled={!user || diminishMutation.isPending}
+                onClick={() => diminish()}
+                disabled={!user || isDiminishing}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${user && snippet.diminishers?.includes(user._id)
                   ? 'bg-slate-400 text-white shadow-lg'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'

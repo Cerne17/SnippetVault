@@ -10,7 +10,7 @@ export default function InsightProgress({ points = 0 }: InsightProgressProps) {
     if (points >= 500) {
         currentRank = { label: 'Sage', icon: Wand2, threshold: 500, nextThreshold: Infinity, color: 'text-purple-600 dark:text-purple-400' };
     } else if (points >= 100) {
-        currentRank = { label: 'Guardian', icon: Shield, threshold: 100, nextThreshold: 500, color: 'text-indigo-600 dark:text-indigo-400' };
+        currentRank = { label: 'Guardian', icon: Shield, threshold: 100, nextThreshold: 500, color: 'text-primary' };
     } else if (points >= 10) {
         currentRank = { label: 'Expert', icon: Sparkles, threshold: 10, nextThreshold: 100, color: 'text-emerald-600 dark:text-emerald-400' };
     }
@@ -39,7 +39,7 @@ export default function InsightProgress({ points = 0 }: InsightProgressProps) {
             <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-700">
                 <div
                     className={`h-full transition-all duration-500 ease-out rounded-full ${currentRank.label === 'Sage' ? 'bg-purple-500' :
-                        currentRank.label === 'Guardian' ? 'bg-indigo-500 dark:bg-indigo-400' :
+                        currentRank.label === 'Guardian' ? 'bg-primary' :
                             currentRank.label === 'Expert' ? 'bg-emerald-500 dark:bg-emerald-400' : 'bg-slate-400'
                         }`}
                     style={{ width: `${progress}%` }}
