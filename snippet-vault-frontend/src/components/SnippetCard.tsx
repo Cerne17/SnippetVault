@@ -27,6 +27,11 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
                 <span>by {typeof snippet.userId === 'object' ? snippet.userId.name : 'Unknown'}</span>
               </div>
               <div className="flex items-center gap-2">
+                {snippet.isPublic && (
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 font-medium text-emerald-600 uppercase tracking-wider text-xs">
+                    Public
+                  </span>
+                )}
                 {snippet.isMarkdown && (
                   <span className="px-2.5 py-0.5 rounded-full bg-indigo-100 font-medium text-indigo-600 uppercase tracking-wider text-xs">
                     Markdown

@@ -4,9 +4,11 @@ import SnippetCard from '../components/SnippetCard';
 import { Loader2, Search } from 'lucide-react';
 import { Input } from '../components/ui/Input';
 import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 
 export default function Home() {
+  const { user } = useAuth();
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
 
@@ -19,7 +21,7 @@ export default function Home() {
   }, [search]);
 
   const { data: snippets, isLoading, error } = useQuery({
-    queryKey: ['snippets', debouncedSearch],
+    queryKey: ['snippets', debouncedSearch, !!user],
     queryFn: () => snippetService.getAll({ search: debouncedSearch }),
   });
 
@@ -43,11 +45,13 @@ export default function Home() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-4">My Snippet Vault</h1>
+        <h1 className="text-3xl font-bold text-slate-900 mb-4">
+          {user ? 'My Snippet Vault' : 'Public Snippets'}
+        </h1>
         <div className="relative max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <Input
-            placeholder="Search your vault..."
+            placeholder={user ? "Search your vault..." : "Search public snippets..."}
             className="pl-10"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -61,7 +65,9 @@ export default function Home() {
         ))}
         {snippets?.length === 0 && (
           <div className="col-span-full text-center py-12 bg-slate-50 rounded-lg border border-dashed border-slate-300">
-            <p className="text-slate-500">Your vault is empty. Time to add some magic!</p>
+            <p className="text-slate-500">
+              {user ? 'Your vault is empty. Time to add some magic!' : 'No public snippets found. Log in to start contributing!'}
+            </p>
           </div>
         )}
       </div>

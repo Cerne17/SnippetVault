@@ -34,6 +34,9 @@ export class Snippet {
     @Prop({ type: Boolean, default: false })
     isMarkdown: boolean;
 
+    @Prop({ type: Boolean, default: false })
+    isPublic: boolean;
+
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
     userId: User;
 }

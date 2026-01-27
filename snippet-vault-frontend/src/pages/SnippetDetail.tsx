@@ -69,6 +69,11 @@ export default function SnippetDetail() {
                   <Calendar className="w-4 h-4" />
                   {new Date(snippet.createdAt).toLocaleDateString()}
                 </span>
+                {snippet.isPublic && (
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 font-medium text-emerald-600 uppercase tracking-wider text-xs">
+                    Public
+                  </span>
+                )}
                 <span className="px-2.5 py-0.5 rounded-full bg-slate-100 font-medium text-slate-600 uppercase tracking-wider text-xs">
                   {snippet.language}
                 </span>

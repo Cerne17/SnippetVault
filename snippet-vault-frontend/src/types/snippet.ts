@@ -8,6 +8,7 @@ export interface Snippet {
   updatedAt: string;
   userId: string | { _id: string; name: string };
   isMarkdown?: boolean;
+  isPublic?: boolean;
 }
 
 export interface CreateSnippetDto {
@@ -16,6 +17,7 @@ export interface CreateSnippetDto {
   language: string;
   tags?: string[];
   isMarkdown?: boolean;
+  isPublic?: boolean;
 }
 
 export interface UpdateSnippetDto extends Partial<CreateSnippetDto> { }

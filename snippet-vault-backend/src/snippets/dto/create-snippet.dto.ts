@@ -21,4 +21,8 @@ export class CreateSnippetDto {
   @IsOptional()
   @IsBoolean()
   isMarkdown?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isPublic?: boolean;
 }

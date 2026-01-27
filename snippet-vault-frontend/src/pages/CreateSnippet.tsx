@@ -96,16 +96,30 @@ export default function CreateSnippet() {
           )}
         </div>
 
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            id="isMarkdown"
-            {...register('isMarkdown')}
-            className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500"
-          />
-          <label htmlFor="isMarkdown" className="text-sm font-medium text-slate-700">
-            Render as Markdown
-          </label>
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isMarkdown"
+              {...register('isMarkdown')}
+              className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500"
+            />
+            <label htmlFor="isMarkdown" className="text-sm font-medium text-slate-700">
+              Render as Markdown
+            </label>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isPublic"
+              {...register('isPublic')}
+              className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500"
+            />
+            <label htmlFor="isPublic" className="text-sm font-medium text-slate-700">
+              Make Public
+            </label>
+          </div>
         </div>
 
         <div>

@@ -20,30 +20,47 @@ export class SnippetsService {
     return newSnippet.save();
   }
 
-  findAll(filterDto: FilterSnippetDto, userId: string): Promise<Snippet[]> {
-    const { language, tag } = filterDto;
-    const query: any = { deletedAt: null, userId };
+  findAll(filterDto: FilterSnippetDto, userId?: string): Promise<Snippet[]> {
+    const { language, tag, search } = filterDto;
+
+    const conditions: any[] = [{ deletedAt: null }];
+
+    if (userId) {
+      conditions.push({ $or: [{ userId }, { isPublic: true }] });
+    } else {
+      conditions.push({ isPublic: true });
+    }
 
     if (language) {
-      query.language = { $regex: language, $options: 'i' };
+      conditions.push({ language: { $regex: language, $options: 'i' } });
     }
 
     if (tag) {
-      query.tags = tag;
+      conditions.push({ tags: tag });
     }
 
-    if (filterDto.search) {
-      query.$or = [
-        { title: { $regex: filterDto.search, $options: 'i' } },
-        { code: { $regex: filterDto.search, $options: 'i' } },
-      ];
+    if (search) {
+      conditions.push({
+        $or: [
+          { title: { $regex: search, $options: 'i' } },
+          { code: { $regex: search, $options: 'i' } },
+        ],
+      });
     }
 
-    return this.snippetModel.find(query).populate('userId', 'name').exec();
+    return this.snippetModel.find({ $and: conditions }).populate('userId', 'name').exec();
   }
 
-  findOne(id: string, userId: string): Promise<Snippet> {
-    return this.snippetModel.findOne({ _id: id, userId, deletedAt: null }).populate('userId', 'name').exec();
+  findOne(id: string, userId?: string): Promise<Snippet> {
+    const conditions: any[] = [{ _id: id, deletedAt: null }];
+
+    if (userId) {
+      conditions.push({ $or: [{ userId }, { isPublic: true }] });
+    } else {
+      conditions.push({ isPublic: true });
+    }
+
+    return this.snippetModel.findOne({ $and: conditions }).populate('userId', 'name').exec();
   }
 
   update(id: string, updateSnippetDto: UpdateSnippetDto, userId: string): Promise<Snippet> {
