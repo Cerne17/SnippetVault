@@ -28,3 +28,6 @@ export class Comment {
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment);
+
+// Compound index for efficient comment feed fetching
+CommentSchema.index({ snippet: 1, createdAt: -1 });
