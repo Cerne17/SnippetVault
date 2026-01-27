@@ -4,7 +4,7 @@ import { snippetService } from '../services/snippetService';
 import { Button } from './ui/Button';
 import { Loader2, MessageSquare, Send } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import InsightBadge from './InsightBadge';
+import InsightBadge from './ui/InsightBadge';
 
 interface CommentSectionProps {
     snippetId: string;

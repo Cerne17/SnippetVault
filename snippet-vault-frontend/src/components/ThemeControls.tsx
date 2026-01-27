@@ -1,14 +1,12 @@
-import { Sun, Moon, Palette, Lock } from 'lucide-react';
+import { Sun, Moon, Palette } from 'lucide-react';
 import { Button } from './ui/Button';
 import { useTheme } from '../context/ThemeContext';
-import { useAuth } from '../context/AuthContext';
 
 interface ThemeControlsProps {
     isMobile?: boolean;
 }
 
 export default function ThemeControls({ isMobile }: ThemeControlsProps) {
-    const { user } = useAuth();
     const { themeMode, toggleThemeMode, setPrimaryColor, primaryColor, unlockedColors } = useTheme();
 
     if (isMobile) {
