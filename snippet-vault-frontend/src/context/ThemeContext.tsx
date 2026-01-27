@@ -53,7 +53,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         const root = window.document.documentElement;
-        root.style.setProperty('--color-primary', primaryColor);
+        root.style.setProperty('--color-primary-dynamic', primaryColor);
         localStorage.setItem('primaryColor', primaryColor);
     }, [primaryColor]);
 

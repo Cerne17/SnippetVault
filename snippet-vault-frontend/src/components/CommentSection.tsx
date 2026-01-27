@@ -48,7 +48,7 @@ export default function CommentSection({ snippetId }: CommentSectionProps) {
     return (
         <div className="mt-8 border-t border-slate-100 pt-8">
             <div className="flex items-center gap-2 mb-6">
-                <MessageSquare className="w-5 h-5 text-indigo-600" />
+                <MessageSquare className="w-5 h-5 text-primary" />
                 <h2 className="text-xl font-bold text-slate-900">Guardian Contributions</h2>
                 <span className="text-sm font-medium text-slate-500 ml-auto">
                     {comments?.length || 0} {comments?.length === 1 ? 'Thought' : 'Thoughts'}
