@@ -4,7 +4,7 @@ import { snippetService } from '../services/snippetService';
 import { useAuth } from '../context/AuthContext';
 import CodeBlock from '../components/CodeBlock';
 import { Button } from '../components/ui/Button';
-import { Loader2, Calendar, Tag, Trash2, ArrowLeft, Pencil, TrendingUp, TrendingDown, Download, FileJson, User, ChevronRight } from 'lucide-react';
+import { Loader2, Calendar, Tag, Trash2, ArrowLeft, Pencil, TrendingUp, TrendingDown, Download, FileJson, User } from 'lucide-react';
 import InsightBadge from '../components/InsightBadge';
 import CommentSection from '../components/CommentSection';
 import { exportSnippetAsJson, exportSnippetAsSource } from '../utils/fileUtils';
@@ -154,8 +154,8 @@ export default function SnippetDetail() {
                 onClick={() => amplifyMutation.mutate()}
                 disabled={!user || amplifyMutation.isPending}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${user && snippet.amplifiers?.includes(user._id)
-                    ? 'bg-primary text-white shadow-lg'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700 hover:text-primary'
+                  ? 'bg-primary text-white shadow-lg'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700 hover:text-primary'
                   } disabled:opacity-50`}
               >
                 <TrendingUp className="w-4 h-4" />
@@ -168,8 +168,8 @@ export default function SnippetDetail() {
                 onClick={() => diminishMutation.mutate()}
                 disabled={!user || diminishMutation.isPending}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${user && snippet.diminishers?.includes(user._id)
-                    ? 'bg-slate-400 text-white shadow-lg'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-slate-400 text-white shadow-lg'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'
                   } disabled:opacity-50`}
               >
                 <TrendingDown className="w-4 h-4" />
