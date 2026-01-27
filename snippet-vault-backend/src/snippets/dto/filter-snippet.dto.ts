@@ -12,4 +12,8 @@ export class FilterSnippetDto {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @IsOptional()
+  @IsString()
+  scope?: string;
 }

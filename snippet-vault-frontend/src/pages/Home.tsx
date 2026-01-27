@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { snippetService } from '../services/snippetService';
 import SnippetCard from '../components/SnippetCard';
-import { Loader2, Search } from 'lucide-react';
+import { Globe, Loader2, Search, User as UserIcon } from 'lucide-react';
 import { Input } from '../components/ui/Input';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
@@ -11,6 +11,7 @@ export default function Home() {
   const { user } = useAuth();
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
+  const [scope, setScope] = useState<'mine' | 'public'>(user ? 'mine' : 'public');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -21,8 +22,8 @@ export default function Home() {
   }, [search]);
 
   const { data: snippets, isLoading, error } = useQuery({
-    queryKey: ['snippets', debouncedSearch, !!user],
-    queryFn: () => snippetService.getAll({ search: debouncedSearch }),
+    queryKey: ['snippets', debouncedSearch, !!user, scope],
+    queryFn: () => snippetService.getAll({ search: debouncedSearch, scope }),
   });
 
   if (isLoading) {
@@ -44,20 +45,53 @@ export default function Home() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-4">
-          {user ? 'My Snippet Vault' : 'Public Snippets'}
-        </h1>
-        <div className="relative max-w-md">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">
+            {scope === 'mine' ? 'My Snippet Vault' : 'Community Vault'}
+          </h1>
+          <p className="text-slate-500 mt-1">
+            {scope === 'mine'
+              ? 'Your personal collection of code gems.'
+              : 'Discover shared code from developers worldwide.'}
+          </p>
+        </div>
+
+        <div className="relative w-full md:max-w-xs">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <Input
-            placeholder={user ? "Search your vault..." : "Search public snippets..."}
+            placeholder={scope === 'mine' ? "Search your vault..." : "Search community..."}
             className="pl-10"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </div>
+
+      {user && (
+        <div className="flex gap-1 p-1 bg-slate-100 rounded-lg mb-8 w-fit">
+          <button
+            onClick={() => setScope('mine')}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-all ${scope === 'mine'
+                ? 'bg-white text-indigo-600 shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+              }`}
+          >
+            <UserIcon className="w-4 h-4" />
+            My Vault
+          </button>
+          <button
+            onClick={() => setScope('public')}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-all ${scope === 'public'
+                ? 'bg-white text-indigo-600 shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+              }`}
+          >
+            <Globe className="w-4 h-4" />
+            Community Vault
+          </button>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {snippets?.map((snippet) => (
@@ -66,7 +100,9 @@ export default function Home() {
         {snippets?.length === 0 && (
           <div className="col-span-full text-center py-12 bg-slate-50 rounded-lg border border-dashed border-slate-300">
             <p className="text-slate-500">
-              {user ? 'Your vault is empty. Time to add some magic!' : 'No public snippets found. Log in to start contributing!'}
+              {scope === 'mine'
+                ? 'Your vault is empty. Time to add some magic!'
+                : 'No public snippets found. Be the first to share one!'}
             </p>
           </div>
         )}

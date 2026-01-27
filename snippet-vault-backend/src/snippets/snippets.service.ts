@@ -21,14 +21,20 @@ export class SnippetsService {
   }
 
   findAll(filterDto: FilterSnippetDto, userId?: string): Promise<Snippet[]> {
-    const { language, tag, search } = filterDto;
+    const { language, tag, search, scope } = filterDto;
 
     const conditions: any[] = [{ deletedAt: null }];
 
-    if (userId) {
-      conditions.push({ $or: [{ userId }, { isPublic: true }] });
-    } else {
+    if (scope === 'mine' && userId) {
+      conditions.push({ userId });
+    } else if (scope === 'public') {
       conditions.push({ isPublic: true });
+    } else {
+      if (userId) {
+        conditions.push({ $or: [{ userId }, { isPublic: true }] });
+      } else {
+        conditions.push({ isPublic: true });
+      }
     }
 
     if (language) {

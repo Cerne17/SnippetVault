@@ -26,4 +26,5 @@ export interface FilterSnippetDto {
   language?: string;
   tag?: string;
   search?: string;
+  scope?: string;
 }
