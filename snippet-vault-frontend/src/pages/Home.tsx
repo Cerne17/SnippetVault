@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { snippetService } from '../services/snippetService';
 import SnippetCard from '../components/SnippetCard';
-import { Globe, Loader2, Search, User as UserIcon } from 'lucide-react';
+import { Globe, Loader2, Search, User as UserIcon, FileJson } from 'lucide-react';
 import { Input } from '../components/ui/Input';
+import { Button } from '../components/ui/Button';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { exportVaultAsJson } from '../utils/fileUtils';
 
 
 export default function Home() {
@@ -90,6 +92,20 @@ export default function Home() {
             <Globe className="w-4 h-4" />
             Community Vault
           </button>
+        </div>
+      )}
+
+      {scope === 'mine' && snippets && snippets.length > 0 && (
+        <div className="flex justify-end mb-4">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={() => exportVaultAsJson(snippets)}
+          >
+            <FileJson className="w-4 h-4" />
+            Export Vault (.json)
+          </Button>
         </div>
       )}
 

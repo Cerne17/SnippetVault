@@ -4,9 +4,10 @@ import { snippetService } from '../services/snippetService';
 import { useAuth } from '../context/AuthContext';
 import CodeBlock from '../components/CodeBlock';
 import { Button } from '../components/ui/Button';
-import { Loader2, Calendar, Tag, Trash2, ArrowLeft, Pencil, TrendingUp, TrendingDown } from 'lucide-react';
+import { Loader2, Calendar, Tag, Trash2, ArrowLeft, Pencil, TrendingUp, TrendingDown, Download, FileJson } from 'lucide-react';
 import InsightBadge from '../components/InsightBadge';
 import CommentSection from '../components/CommentSection';
+import { exportSnippetAsJson, exportSnippetAsSource } from '../utils/fileUtils';
 
 export default function SnippetDetail() {
   const { id } = useParams<{ id: string }>();
@@ -108,32 +109,42 @@ export default function SnippetDetail() {
                 </p>
               )}
             </div>
-            {isOwner && (
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => navigate(`/snippets/${snippet._id}/edit`)}>
-                  <Pencil className="w-4 h-4 mr-2" />
-                  Edit
+            <div className="flex gap-2">
+              <div className="flex bg-slate-100 rounded-lg p-1 mr-2">
+                <Button variant="ghost" size="sm" onClick={() => exportSnippetAsSource(snippet)} title="Download Source">
+                  <Download className="w-4 h-4" />
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
-                  onClick={() => {
-                    if (confirm('Are you sure you want to delete this snippet?')) {
-                      deleteMutation.mutate(snippet._id);
-                    }
-                  }}
-                  disabled={deleteMutation.isPending}
-                >
-                  {deleteMutation.isPending ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Trash2 className="w-4 h-4 mr-2" />
-                  )}
-                  Delete
+                <Button variant="ghost" size="sm" onClick={() => exportSnippetAsJson(snippet)} title="Download JSON">
+                  <FileJson className="w-4 h-4" />
                 </Button>
               </div>
-            )}
+              {isOwner && (
+                <>
+                  <Button variant="outline" size="sm" onClick={() => navigate(`/snippets/${snippet._id}/edit`)}>
+                    <Pencil className="w-4 h-4 mr-2" />
+                    Edit
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+                    onClick={() => {
+                      if (confirm('Are you sure you want to delete this snippet?')) {
+                        deleteMutation.mutate(snippet._id);
+                      }
+                    }}
+                    disabled={deleteMutation.isPending}
+                  >
+                    {deleteMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Trash2 className="w-4 h-4 mr-2" />
+                    )}
+                    Delete
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="mt-8 flex items-center justify-between">
