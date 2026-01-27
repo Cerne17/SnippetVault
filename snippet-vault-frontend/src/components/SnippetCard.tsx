@@ -19,22 +19,29 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
               </h3>
             </Link>
             <div className="flex items-center justify-between text-sm text-slate-500">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <Calendar className="w-4 h-4" />
-              {new Date(snippet.createdAt).toLocaleDateString()}
-            </span>
-            <span>by {typeof snippet.userId === 'object' ? snippet.userId.name : 'Unknown'}</span>
-          </div>
-          <span className="px-2.5 py-0.5 rounded-full bg-slate-100 font-medium text-slate-600 uppercase tracking-wider text-xs">
-            {snippet.language}
-          </span>
-        </div>
+              <div className="flex items-center gap-4">
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-4 h-4" />
+                  {new Date(snippet.createdAt).toLocaleDateString()}
+                </span>
+                <span>by {typeof snippet.userId === 'object' ? snippet.userId.name : 'Unknown'}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                {snippet.isMarkdown && (
+                  <span className="px-2.5 py-0.5 rounded-full bg-indigo-100 font-medium text-indigo-600 uppercase tracking-wider text-xs">
+                    Markdown
+                  </span>
+                )}
+                <span className="px-2.5 py-0.5 rounded-full bg-slate-100 font-medium text-slate-600 uppercase tracking-wider text-xs">
+                  {snippet.language}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
         <div className="max-h-64 overflow-hidden relative group">
-          <CodeBlock code={snippet.code} language={snippet.language} />
+          <CodeBlock code={snippet.code} language={snippet.language} isMarkdown={snippet.isMarkdown} />
           <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent pointer-events-none" />
           <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white via-white/80 to-transparent flex items-end justify-center pb-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <Link to={`/snippets/${snippet._id}`} className="text-xs font-medium text-indigo-600 hover:text-indigo-700 bg-white/90 px-3 py-1 rounded-full shadow-sm border border-indigo-100">

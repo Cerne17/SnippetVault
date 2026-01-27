@@ -50,9 +50,9 @@ export default function SnippetDetail() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <Button 
-        variant="ghost" 
-        className="mb-6 pl-0 hover:bg-transparent hover:text-indigo-600" 
+      <Button
+        variant="ghost"
+        className="mb-6 pl-0 hover:bg-transparent hover:text-indigo-600"
         onClick={() => navigate('/')}
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
@@ -76,8 +76,8 @@ export default function SnippetDetail() {
               </div>
             </div>
             {isOwner && (
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
                 onClick={() => {
                   if (confirm('Are you sure you want to delete this snippet?')) {
@@ -109,7 +109,7 @@ export default function SnippetDetail() {
         </div>
 
         <div className="p-6 bg-slate-50">
-          <CodeBlock code={snippet.code} language={snippet.language} />
+          <CodeBlock code={snippet.code} language={snippet.language} isMarkdown={snippet.isMarkdown} />
         </div>
       </div>
     </div>

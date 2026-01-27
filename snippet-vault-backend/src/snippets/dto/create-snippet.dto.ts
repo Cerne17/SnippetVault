@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsArray, IsOptional } from "class-validator";
+import { IsString, IsNotEmpty, IsArray, IsOptional, IsBoolean } from "class-validator";
 
 export class CreateSnippetDto {
   @IsString()
@@ -17,4 +17,8 @@ export class CreateSnippetDto {
   @IsString({ each: true })
   @IsOptional()
   tags?: string[];
+
+  @IsOptional()
+  @IsBoolean()
+  isMarkdown?: boolean;
 }

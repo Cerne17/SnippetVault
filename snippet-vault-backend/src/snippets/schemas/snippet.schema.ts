@@ -31,6 +31,9 @@ export class Snippet {
     @Prop({ type: Date, default: null })
     favoritedAt: Date | null;
 
+    @Prop({ type: Boolean, default: false })
+    isMarkdown: boolean;
+
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
     userId: User;
 }
