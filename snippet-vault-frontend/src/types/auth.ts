@@ -3,6 +3,10 @@ export interface User {
   email: string;
   name: string;
   insightPoints?: number;
+  preferences?: {
+    themeMode: 'light' | 'dark';
+    primaryColor: string;
+  };
 }
 
 export interface AuthResponse {

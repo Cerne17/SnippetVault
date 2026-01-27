@@ -8,23 +8,26 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   return (
     <AuthProvider>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="snippets/:id" element={<SnippetDetail />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
+      <ThemeProvider>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="snippets/:id" element={<SnippetDetail />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
 
-          <Route element={<ProtectedRoute />}>
-            <Route path="create" element={<CreateSnippet />} />
-            <Route path="snippets/:id/edit" element={<EditSnippet />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="create" element={<CreateSnippet />} />
+              <Route path="snippets/:id/edit" element={<EditSnippet />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
+        </Routes>
+      </ThemeProvider>
     </AuthProvider>
   );
 }

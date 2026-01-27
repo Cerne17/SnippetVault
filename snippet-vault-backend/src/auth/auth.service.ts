@@ -43,4 +43,11 @@ export class AuthService {
     const { passwordHash, ...result } = (user as any).toObject ? (user as any).toObject() : user;
     return result;
   }
+
+  async updatePreferences(userId: string, preferences: any) {
+    const user = await this.usersService.updatePreferences(userId, preferences);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { passwordHash, ...result } = (user as any).toObject ? (user as any).toObject() : user;
+    return result;
+  }
 }

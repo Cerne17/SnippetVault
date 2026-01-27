@@ -16,4 +16,9 @@ export const authService = {
     const response = await api.get<User>('/auth/me');
     return response.data;
   },
+
+  updatePreferences: async (preferences: any): Promise<User> => {
+    const response = await api.patch<User>('/auth/preferences', preferences);
+    return response.data;
+  },
 };

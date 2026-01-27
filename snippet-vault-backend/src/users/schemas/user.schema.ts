@@ -16,6 +16,19 @@ export class User {
 
   @Prop({ type: Number, default: 0 })
   insightPoints: number;
+
+  @Prop({
+    type: {
+      themeMode: { type: String, enum: ['light', 'dark'], default: 'light' },
+      primaryColor: { type: String, default: '#8b5cf6' },
+    },
+    default: { themeMode: 'light', primaryColor: '#8b5cf6' },
+    _id: false,
+  })
+  preferences: {
+    themeMode: 'light' | 'dark';
+    primaryColor: string;
+  };
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

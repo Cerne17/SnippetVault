@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>) { }
 
   async create(email: string, password: string, name: string): Promise<User> {
     const salt = await bcrypt.genSalt();
@@ -18,8 +18,12 @@ export class UsersService {
   async findOneByEmail(email: string): Promise<User | undefined> {
     return this.userModel.findOne({ email }).exec();
   }
-  
+
   async findOneById(id: string): Promise<User | undefined> {
     return this.userModel.findById(id).exec();
+  }
+
+  async updatePreferences(id: string, preferences: any): Promise<User> {
+    return this.userModel.findByIdAndUpdate(id, { preferences }, { new: true }).exec();
   }
 }
